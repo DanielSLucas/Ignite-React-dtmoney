@@ -10,7 +10,7 @@ import totalImg from '../../assets/total.svg';
 
 
 const Summary: React.FC = () => {
-  const data = useContext(TransactionsContext);    
+  const transactions = useContext(TransactionsContext);      
 
   return (
     <Container>
