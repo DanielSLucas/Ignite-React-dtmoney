@@ -1,6 +1,6 @@
-import React, { useContext } from 'react';
+import React, { useMemo } from 'react';
 
-import { TransactionsContext } from '../../TransactionsContext';
+import { useTransactions } from '../../hooks/useTransactions';
 
 import { Container } from './styles';
 
@@ -10,7 +10,24 @@ import totalImg from '../../assets/total.svg';
 
 
 const Summary: React.FC = () => {
-  const { transactions } = useContext(TransactionsContext);      
+  const { transactions } = useTransactions();      
+
+  const summaryData = useMemo(() => {
+    return transactions.reduce((acc, transaction) => {
+      if(transaction.type === 'deposit') {
+        acc.income += transaction.amount;        
+      } else {
+        acc.outcome += transaction.amount        
+      }
+      acc.total = acc.income - acc.outcome;
+
+      return acc;
+    }, {
+      income: 0,
+      outcome: 0,
+      total: 0,
+    });        
+  }, [transactions])
 
   return (
     <Container>
@@ -19,7 +36,12 @@ const Summary: React.FC = () => {
           <p>Entradas</p>
           <img src={incomeImg} alt="Entradas" />
         </header>
-        <strong>R$1000,00</strong>
+        <strong>
+          {new Intl.NumberFormat('pt-BR', {
+            style: 'currency',
+            currency: 'BRL',
+          }).format(summaryData.income)}
+        </strong>
       </div>
 
       <div>
@@ -27,7 +49,13 @@ const Summary: React.FC = () => {
           <p>Saídas</p>
           <img src={outcomeImg} alt="Saídas" />
         </header>
-        <strong>- R$500,00</strong>
+        <strong>
+          -
+          {new Intl.NumberFormat('pt-BR', {
+            style: 'currency',
+            currency: 'BRL',
+          }).format(summaryData.outcome)}
+        </strong>
       </div>
 
       <div className='highlight-background'>
@@ -35,7 +63,12 @@ const Summary: React.FC = () => {
           <p>Total</p>
           <img src={totalImg} alt="Total" />
         </header>
-        <strong>R$500,00</strong>
+        <strong>
+          {new Intl.NumberFormat('pt-BR', {
+            style: 'currency',
+            currency: 'BRL',
+          }).format(summaryData.total)}
+        </strong>
       </div>
     </Container>
   );

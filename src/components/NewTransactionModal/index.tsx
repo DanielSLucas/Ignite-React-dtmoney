@@ -1,7 +1,7 @@
-import React, { FormEvent, useContext, useState } from 'react';
+import React, { FormEvent, useState } from 'react';
 import Modal from 'react-modal';
 
-import { TransactionsContext } from '../../TransactionsContext';
+import { useTransactions } from '../../hooks/useTransactions';
 
 import { Container, RadioBox, TransactionTypeContainer } from './styles';
 
@@ -15,7 +15,7 @@ interface NewTransactionModalProp {
 }
 
 const NewTransactionModal: React.FC<NewTransactionModalProp> = ({ isOpen, onRequestClose }) => {
-  const { createTransaction } = useContext(TransactionsContext);
+  const { createTransaction } = useTransactions();
   
   const [type, setType] = useState('deposit');
   const [title, setTitle] = useState('');
