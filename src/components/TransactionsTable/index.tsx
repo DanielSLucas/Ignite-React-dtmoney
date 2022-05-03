@@ -7,7 +7,7 @@ import { Container } from './styles';
 
 
 const TransactionsTable: React.FC = () => {
-  const transactions = useContext(TransactionsContext);
+  const { transactions } = useContext(TransactionsContext);
     
   return (
     <Container>
